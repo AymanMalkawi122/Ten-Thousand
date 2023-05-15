@@ -1,0 +1,1 @@
+give me a python3 function to generate a tuple that contains six random numbers from 1 to 6
