@@ -93,6 +93,7 @@ def test_six_ones():
     expected = 4000
     assert actual == expected
 
+
 @pytest.mark.parametrize(
     "test_input,expected",
     [
@@ -143,3 +144,38 @@ def test_six_ones():
 def test_all(test_input, expected):
     actual = GameLogic.calculate_score(test_input)
     assert actual == expected
+
+#additional defined tests
+
+def test_user_1():
+    actual = GameLogic.calculate_score((2, 3, 4, 6, 6, 6))
+    expected = 600
+    assert actual == expected
+
+def test_user_2():
+    actual = GameLogic.calculate_score((1, 1, 2, 3, 4, 6))
+    expected = 200
+    assert actual == expected
+
+def test_user_3():
+    actual = GameLogic.calculate_score((3, 3, 3, 3, 2, 3))
+    expected = 900
+    assert actual == expected
+
+def test_user_4():
+    actual = GameLogic.calculate_score((1, 1, 3, 3, 5, 5))
+    expected = 1500
+    assert actual == expected
+
+def test_user_5():
+    with pytest.raises(Exception):
+        GameLogic.calculate_score((-1,))
+
+def test_user_6():
+    with pytest.raises(Exception):
+        GameLogic.calculate_score((10,))
+
+def test_cheater():
+    with pytest.raises(Exception):
+        GameLogic.calculate_score((1 , 2, 3, 4, 5, 6, 6))
+    

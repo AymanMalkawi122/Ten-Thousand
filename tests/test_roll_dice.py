@@ -54,7 +54,6 @@ def test_7_dice():
     with pytest.raises(Exception):
         GameLogic.roll_dice(7)
     
-
 def test_8_dice():
     with pytest.raises(Exception):
-        GameLogic.roll_dice(7)
+        GameLogic.roll_dice(0)
