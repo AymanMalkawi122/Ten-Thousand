@@ -89,3 +89,27 @@ class GameLogic:
         numbers = [random.randint(1, 6) for i in range(n)]
         return tuple(numbers)
 
+"""
+This class provides game logic for calculating the score of a roll of dice
+and for rolling a certain number of dice. The scoring system is based on the
+following rules:
+
+1. Triples - Three dice with the same number, except for three 1's which are worth 1000 points.
+2. Three pairs - A roll with three pairs of different numbers. This is worth 1500 points.
+3. Straight - A roll with all six dice showing different numbers in sequence. This is worth 1500 points.
+4. Singles - Any dice that is not part of a triple, pair or straight and shows 1 or 5. 
+   Ones are worth 100 points each and fives are worth 50 points each.
+
+Public methods:
+
+- calculate_score(dice): Calculates the score of a roll of dice according to the above rules.
+- roll_dice(n): Rolls a certain number of dice and returns the values as a tuple.
+
+Private methods:
+
+- __empty_counts(counts): Resets the counts of dice in each category to 0.
+- __triplets(counts): Calculates the score for any triplets in the roll.
+- __three_pair(counts): Calculates the score for any three pairs in the roll.
+- __singles(counts): Calculates the score for any single 1's or 5's in the roll.
+- __straight(counts): Calculates the score for a straight roll of all six dice.
+"""
