@@ -3,7 +3,16 @@ import random
 class GameLogic:
 
 # Private
-
+    #helper methods
+    @staticmethod
+    def __represents_int(string):
+        try: 
+            int(string)
+        except ValueError:
+            return False
+        else:
+            return True
+        
     @staticmethod
     def __empty_counts(counts):
         for i in range(1,7):
@@ -55,12 +64,81 @@ class GameLogic:
 
         return 0
 
+    @staticmethod
+    def __play_prompt():
+        print("Welcome to Ten Thousand\n(y)es to play or (n)o to decline")
+        while(GameLogic.game_state == "play_prompt"):
+
+            choice= input("> ")
+            if choice == "n":
+                print("OK. Maybe another time")
+                GameLogic.game_state = "quit_game"
+            elif choice == "y":
+                GameLogic.game_state = "play_game"
+            else:
+                print("wrong input!")
+
+    @staticmethod
+    def __play_game():
+        while(GameLogic.game_state == "play_game"):
+            print(f"Starting round {GameLogic.current_round}")
+            print(f"Rolling 6 dice...\n***{list(GameLogic.roll_dice(6))}***")        
+            print("Enter dice to keep, or (q)uit")
+
+            choice= input("> ")
+            if choice == "q":
+                print(f"Thanks for playing. You earned {GameLogic.total_score} points")
+                GameLogic.game_state = "quit_game"
+                    
+            elif(GameLogic.__represents_int(choice)):
+                GameLogic.played_dice += list(choice)
+                GameLogic.game_state = "play_round"
+            else:
+                print("wrong input!")
+
+    @staticmethod
+    def __play_round():
+        while(GameLogic.game_state == "play_round"):
+            
+            print(f"You have {GameLogic.calculate_score(GameLogic.played_dice)} unbanked points and " + 
+                f"{len(GameLogic.current_roll) - len(GameLogic.played_dice)} dice remaining")
+            print("(r)oll again, (b)ank your points or (q)uit")
+            choice= input("> ")
+            if choice == 'b':
+                GameLogic.total_score += GameLogic.calculate_score(GameLogic.played_dice)
+                print(f"You banked {GameLogic.calculate_score(GameLogic.played_dice)} points in round {GameLogic.current_round}\n"+
+                        f"Total score is {GameLogic.total_score} points")
+                GameLogic.current_round += 1
+                GameLogic.played_dice = []
+                GameLogic.game_state = "play_game"
+
+            elif choice == 'r':
+                pass
+
+            elif choice == 'q':
+                print(f"Thanks for playing. You earned {GameLogic.total_score} points")
+                GameLogic.game_state = "quit_game"
+
+            else:
+                print("wrong input!")
+
+    @staticmethod
+    def __game_iteration():
+        state_map={
+           "play_prompt" : GameLogic.__play_prompt,
+           "play_game" : GameLogic.__play_game,
+           "play_round" : GameLogic.__play_round,
+        }
+        state_map[GameLogic.game_state]()
+    #helper methods
+
 # Public
 
     current_roll = 0
     total_score = 0
     current_round = 1
-    played__dice = []
+    played_dice = []
+    game_state = "play_prompt"
 
     @staticmethod
     def calculate_score(dice):
@@ -97,41 +175,8 @@ class GameLogic:
 
     @staticmethod
     def play():
-        print("Welcome to Ten Thousand\n(y)es to play or (n)o to decline")
-        
-        while GameLogic.total_score<10000:
-            choice= input("> ")
-
-            if choice == "n":
-                print("OK. Maybe another time")
-                return
-            elif choice == "y":
-                while True:
-                    print(f"Starting round {GameLogic.current_round}")
-                    print(f"Rolling 6 dice...\n***{list(GameLogic.roll_dice(6))}***")
-                    
-                    print("Enter dice to keep, or (q)uit")
-
-                    choice= input("> ")
-                    if choice == "q":
-                        print(f"Thanks for playing. You earned {GameLogic.total_score} points")
-                        return
-                    
-                    else:
-                        GameLogic.played__dice += list(choice)
-                        print(f"You have {GameLogic.calculate_score(GameLogic.played__dice)} unbanked points and " + 
-                            f"{len(GameLogic.current_roll) - len(GameLogic.played__dice)} dice remaining")
-                        print("(r)oll again, (b)ank your points or (q)uit")
-                        choice= input("> ")
-                        if choice == 'b':
-                            GameLogic.total_score += GameLogic.calculate_score(GameLogic.played__dice)
-                            print(f"You banked {GameLogic.calculate_score(GameLogic.played__dice)} points in round {GameLogic.current_round}\n"+
-                                  f"Total score is {GameLogic.total_score} points")
-                            GameLogic.current_round += 1
-                            GameLogic.played__dice = []
-        
-            else:
-                print("wronge choice!")
+        while GameLogic.total_score <10000 and GameLogic.game_state != "quit_game":
+            GameLogic.__game_iteration()
 
 
 if __name__ == "__main__":
@@ -141,11 +186,6 @@ if __name__ == "__main__":
     This class provides game logic functionalities for a dice game.
 
     Methods:
-    - __empty_counts(counts): Empties the counts list by setting all elements to 0.
-    - __triplets(counts): Calculates the score for triplets and above.
-    - __three_pair(counts): Checks for three pairs and calculates the score.
-    - __singles(counts): Calculates the score for singles (1's and 5's).
-    - __straight(counts): Checks for a straight and calculates the score.
     - calculate_score(dice): Calculates the total score for a given set of dice.
     - roll_dice(n): Rolls a specified number of dice.
     - play(): Starts the game and manages the gameplay.
@@ -154,8 +194,8 @@ if __name__ == "__main__":
     - current_roll: The current roll of dice.
     - total_score: The total score accumulated in the game.
     - current_round: The current round number.
-    - played__dice: The dice that have been played in the current round.
-
+    - played_dice: The dice that have been played in the current round.
+    - game_state:  the state of the game
     Usage:
     - Use the play method to start the game and manage the gameplay.
 """
