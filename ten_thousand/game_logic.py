@@ -4,7 +4,7 @@ class GameLogic:
 
 # Private
     #helper methods
-   
+    #V1
     @staticmethod
     def __represents_int(string):
         try: 
@@ -64,7 +64,8 @@ class GameLogic:
             return 1500
 
         return 0
-
+    
+    #V2
     @staticmethod
     def __play_prompt():
         print("Welcome to Ten Thousand\n(y)es to play or (n)o to decline")
@@ -78,47 +79,6 @@ class GameLogic:
                 GameLogic.game_state = "play_game"
             else:
                 print("wrong input!")
-
-    @staticmethod
-    def __check_zilch():
-        if len(GameLogic.current_roll) != 6:
-            return GameLogic.calculate_score(GameLogic.current_roll + tuple(GameLogic.played_dice)) == GameLogic.calculate_score(GameLogic.played_dice)
-        return GameLogic.calculate_score(GameLogic.current_roll) == 0
-
-    @staticmethod
-    def __print_zilch():
-        print("""
-****************************************
-**        Zilch!!! Round over         **
-****************************************""")
-        print(f"You banked 0 points in round {GameLogic.current_round}\nTotal score is {GameLogic.total_score} points") 
-         
-    @staticmethod
-    def __check_hot_dice():
-        return len(GameLogic.get_scorers(GameLogic.played_dice)) == 6 and len(GameLogic.played_dice) == 6
-
-    @staticmethod
-    def __check_cheater_or_typo(dice):
-        if GameLogic.__represents_int(dice):
-            if GameLogic.validate_keepers(GameLogic.current_roll, dice):
-                return True
-        return False
-
-    @staticmethod
-    def __get_dice(return_state = "play_round"):
-        while True:         
-            choice= input("> ")
-            if choice == "q":
-                print(f"Thanks for playing. You earned {GameLogic.total_score} points")
-                GameLogic.game_state = "quit_game"
-                return
-                    
-            elif(GameLogic.__check_cheater_or_typo(choice)):
-                GameLogic.played_dice += list(choice)
-                GameLogic.game_state = return_state
-                return
-            else:
-                print("Cheater!!! Or possibly made a typo...")
 
     @staticmethod
     def __play_game():
@@ -182,6 +142,49 @@ class GameLogic:
            "play_round" : GameLogic.__play_round,
         }
         state_map[GameLogic.game_state]()
+    
+    #V3
+    @staticmethod
+    def __check_zilch():
+        if len(GameLogic.current_roll) != 6:
+            return GameLogic.calculate_score(GameLogic.current_roll + tuple(GameLogic.played_dice)) == GameLogic.calculate_score(GameLogic.played_dice)
+        return GameLogic.calculate_score(GameLogic.current_roll) == 0
+
+    @staticmethod
+    def __print_zilch():
+        print("""
+****************************************
+**        Zilch!!! Round over         **
+****************************************""")
+        print(f"You banked 0 points in round {GameLogic.current_round}\nTotal score is {GameLogic.total_score} points") 
+         
+    @staticmethod
+    def __check_hot_dice():
+        return len(GameLogic.get_scorers(GameLogic.played_dice)) == 6 and len(GameLogic.played_dice) == 6
+
+    @staticmethod
+    def __check_cheater_or_typo(dice):
+        if GameLogic.__represents_int(dice):
+            if GameLogic.validate_keepers(GameLogic.current_roll, dice):
+                return True
+        return False
+
+    @staticmethod
+    def __get_dice(return_state = "play_round"):
+        while True:         
+            choice= input("> ")
+            if choice == "q":
+                print(f"Thanks for playing. You earned {GameLogic.total_score} points")
+                GameLogic.game_state = "quit_game"
+                return
+                    
+            elif(GameLogic.__check_cheater_or_typo(choice)):
+                GameLogic.played_dice += list(choice)
+                GameLogic.game_state = return_state
+                return
+            else:
+                print(f"Cheater!!! Or possibly made a typo...\n***{list(GameLogic.current_roll)}***")
+
     
     #helper methods
 # Private
