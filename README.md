@@ -1,4 +1,4 @@
-# LAB - Class 06
+# LAB - Class 08
 
 ## Project: Ten Thousand
 
@@ -12,6 +12,10 @@ in the ubintu terminal run the following command to install all of the Python mo
 
  ```pip install -r requirements.txt```
 
-then run the following command to test the functionality of all units
+run the following command to test the functionality of all units.
 
 ```pytest```
+
+then run the following command to start the 10 000 Game.
+
+```(python3 or python) ten_thousand/game_logic.py```
