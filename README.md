@@ -1,10 +1,10 @@
-# LAB - Class 07
+# LAB - Class 08
 
 ## Project: Ten Thousand
 
 ### Author
 
-Narmeen Alkatab (Driver) , Ayman Malkawi (Navigator)
+Ayman Malkawi (Driver) , Narmeen Alkatab (Navigator)
 
 ### How to initialize/run application
 
@@ -16,6 +16,6 @@ run the following command to test the functionality of all units.
 
 ```pytest```
 
-then run the following command to start the 1000 Game.
+then run the following command to start the 10 000 Game.
 
 ```(python3 or python) ten_thousand/game_logic.py```
