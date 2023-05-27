@@ -1,9 +1,8 @@
 import random
 
 class GameLogic:
+#helper methods
 
-# Private
-    #helper methods
     #V1
     @staticmethod
     def __represents_int(string):
@@ -74,7 +73,7 @@ class GameLogic:
             choice= input("> ")
             if choice == "n":
                 print("OK. Maybe another time")
-                GameLogic.game_state = "quit_game"
+                GameLogic.game_state = "exit_game"
             elif choice == "y":
                 GameLogic.game_state = "play_game"
             else:
@@ -87,7 +86,6 @@ class GameLogic:
             print(f"Rolling 6 dice...\n***{list(GameLogic.roll_dice(6))}***")
             if GameLogic.__check_zilch():
                 GameLogic.__print_zilch()
-                print(GameLogic.__check_zilch())
                 GameLogic.current_round += 1
                 continue
             print("Enter dice to keep, or (q)uit")
@@ -128,18 +126,18 @@ class GameLogic:
                     GameLogic.__get_dice()
 
             elif choice == 'q':
-                print(f"Thanks for playing. You earned {GameLogic.total_score} points")
                 GameLogic.game_state = "quit_game"
 
             else:
                 print("wrong input!")
 
     @staticmethod
-    def __game_iteration():
+    def game_iteration():
         state_map={
-           "play_prompt" : GameLogic.__play_prompt,
-           "play_game" : GameLogic.__play_game,
-           "play_round" : GameLogic.__play_round,
+            "play_prompt" : GameLogic.__play_prompt,
+            "play_game" : GameLogic.__play_game,
+            "play_round" : GameLogic.__play_round,
+            "quit_game" : GameLogic.quit_game,
         }
         state_map[GameLogic.game_state]()
     
@@ -160,7 +158,7 @@ class GameLogic:
          
     @staticmethod
     def __check_hot_dice():
-        return len(GameLogic.get_scorers(GameLogic.played_dice)) == 6 and len(GameLogic.played_dice) == 6
+        return len(GameLogic.get_scorers(GameLogic.played_dice)) == 6
 
     @staticmethod
     def __check_cheater_or_typo(dice):
@@ -174,7 +172,6 @@ class GameLogic:
         while True:         
             choice= input("> ")
             if choice == "q":
-                print(f"Thanks for playing. You earned {GameLogic.total_score} points")
                 GameLogic.game_state = "quit_game"
                 return
                     
@@ -185,9 +182,19 @@ class GameLogic:
             else:
                 print(f"Cheater!!! Or possibly made a typo...\n***{list(GameLogic.current_roll)}***")
 
-    
-    #helper methods
-# Private
+    #V4
+    @staticmethod
+    def reset():
+        GameLogic.current_roll = 0
+        GameLogic.total_score = 0
+        GameLogic.current_round = 1
+        GameLogic.played_dice = []
+        GameLogic.game_state = "play_prompt" 
+
+    def quit_game():
+        print(f"Thanks for playing. You earned {GameLogic.total_score} points")
+        GameLogic.game_state = "exit_game"
+#helper methods
 
 
 # Public
@@ -227,14 +234,10 @@ class GameLogic:
 
         if n not in range(1, 7):
             raise Exception(f"number of dice {n} is out of bounds [1 , 6]")
-        GameLogic.current_roll= tuple([random.randint(1, 6) for i in range(n)])
+        GameLogic.current_roll= tuple([46])
+        # GameLogic.current_roll= tuple([random.randint(1, 6) for i in range(n)])
 
         return GameLogic.current_roll
-
-    @staticmethod
-    def play():
-        while GameLogic.total_score <10000 and GameLogic.game_state != "quit_game":
-            GameLogic.__game_iteration()
 
     @staticmethod
     def validate_keepers(roll, keepers):
@@ -248,9 +251,10 @@ class GameLogic:
 
     @staticmethod
     def get_scorers(dice):
+        dice = tuple([int(die) for die in dice])
         counts = [0] * 7  # initialize a counter for each possible value of a die
         for die in dice:
-            counts[int(die)] += 1
+            counts[die] += 1
 
         GameLogic.__triplets(counts)
         GameLogic.__three_pair(counts)
@@ -259,13 +263,11 @@ class GameLogic:
 
         reminder = []
         for count, i in enumerate(counts):
-            reminder += [count] * i
+            reminder += [int(count)] * i
+        print(tuple([item for item in dice if item not in reminder]),"\n",reminder)
         return tuple([item for item in dice if item not in reminder])
 
 # Public
-
-if __name__ == "__main__":
-       GameLogic.play()
 
 """
     A class representing the logic for a game called Ten Thousand.
@@ -273,10 +275,9 @@ if __name__ == "__main__":
     Public Methods:
         - calculate_score(dice): Calculates the score based on the given dice values.
         - roll_dice(n): Rolls the specified number of dice and returns their values.
-        - play(): Starts the game and manages the game state until a winning condition is met.
         - validate_keepers(roll, keepers): Validates the selected dice keepers based on the current roll.
         - get_scorers(dice): Returns the dice that contribute to the score.
-
+        - game_iteration(): Helper method to execute the appropriate game logic based on the current game state.
     Attributes:
         - current_roll: Stores the current roll of dice.
         - total_score: Keeps track of the total score of the player.
@@ -299,5 +300,4 @@ if __name__ == "__main__":
         - __get_dice(return_state): Helper method to get the dice input from the player.
         - __play_game(): Helper method to handle the game flow during the "play_game" state.
         - __play_round(): Helper method to handle the game flow during the "play_round" state.
-        - __game_iteration(): Helper method to execute the appropriate game logic based on the current game state.
 """
