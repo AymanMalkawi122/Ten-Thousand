@@ -67,7 +67,8 @@ class GameLogic:
     # V2
     @staticmethod
     def __play_prompt():
-        print("Welcome to Ten Thousand\n(y)es to play or (n)o to decline")
+        print("Welcome to Ten Thousand)")
+        print("(y)es to play or (n)o to decline")
         while GameLogic.game_state == "play_prompt":
             choice = input("> ")
             if choice == "n":
@@ -82,12 +83,14 @@ class GameLogic:
     def __play_game():
         while GameLogic.game_state == "play_game":
             print(f"Starting round {GameLogic.current_round}")
-            print(f"Rolling 6 dice...\n***{list(GameLogic.roll_dice(6))}***")
+            print(f"Rolling 6 dice...")
+            
+            print("*** "+" ".join(map(str,GameLogic.roll_dice(6)))+" ***")
             if GameLogic.__check_zilch():
                 GameLogic.__print_zilch()
                 GameLogic.current_round += 1
                 continue
-            print("Enter dice to keep, or (q)uit")
+            print("Enter dice to keep, or (q)uit:")
             GameLogic.__get_dice()
 
     @staticmethod
@@ -102,23 +105,21 @@ class GameLogic:
                 f"You have {round_score + GameLogic.calculate_score(GameLogic.played_dice)} unbanked points and "
                 + f"{remaining} dice remaining"
             )
-            print("(r)oll again, (b)ank your points or (q)uit")
+            print("(r)oll again, (b)ank your points or (q)uit:")
             choice = input("> ")
             if choice == "b":
                 round_score += GameLogic.calculate_score(GameLogic.played_dice)
                 GameLogic.total_score += round_score
-                print(
-                    f"You banked {round_score} points in round {GameLogic.current_round}\n"
-                    + f"Total score is {GameLogic.total_score} points"
-                )
+                print(f"You banked {round_score} points in round {GameLogic.current_round}")
+                print(f"Total score is {GameLogic.total_score} points")
+                
                 GameLogic.current_round += 1
                 GameLogic.played_dice = []
                 GameLogic.game_state = "play_game"
 
             elif choice == "r":
-                print(
-                    f"Rolling {remaining} dice...\n***{list(GameLogic.roll_dice(remaining))}***"
-                )
+                print(f"Rolling {remaining} dice...")
+                print("*** "+" ".join(list(map(str,GameLogic.roll_dice(remaining))))+" ***")
                 if GameLogic.__check_zilch():
                     GameLogic.__print_zilch()
                     GameLogic.current_round += 1
@@ -128,7 +129,7 @@ class GameLogic:
                     if remaining == 6:
                         round_score += GameLogic.calculate_score(GameLogic.played_dice)
                         GameLogic.played_dice = []
-                    print("Enter dice to keep, or (q)uit")
+                    print("Enter dice to keep, or (q)uit:")
                     GameLogic.__get_dice()
 
             elif choice == "q":
@@ -166,9 +167,8 @@ class GameLogic:
 **        Zilch!!! Round over         **
 ****************************************"""
         )
-        print(
-            f"You banked 0 points in round {GameLogic.current_round}\nTotal score is {GameLogic.total_score} points"
-        )
+        print(f"You banked 0 points in round {GameLogic.current_round}")
+        print(f"Total score is {GameLogic.total_score} points")
 
     @staticmethod
     def __check_hot_dice():
@@ -179,6 +179,7 @@ class GameLogic:
         if GameLogic.__represents_int(dice):
             if GameLogic.validate_keepers(GameLogic.current_roll, dice):
                 return True
+        raise Exception(f"dice:{dice} current:{GameLogic.current_roll}")
         return False
 
     @staticmethod
@@ -194,9 +195,8 @@ class GameLogic:
                 GameLogic.game_state = return_state
                 return
             else:
-                print(
-                    f"Cheater!!! Or possibly made a typo...\n***{list(GameLogic.current_roll)}***"
-                )
+                print(f"Cheater!!! Or possibly made a typo...")
+                print("*** "+" ".join(map(str,GameLogic.current_roll))+" ***")
 
     # V4
     @staticmethod

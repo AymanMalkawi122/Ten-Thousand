@@ -16,6 +16,6 @@ run the following command to test the functionality of all units.
 
 ```pytest```
 
-then run the following command to start the 10 000 Game.
+then run the following command to start nellie VS Greedy bots
 
-```(python3 or python) ten_thousand/game_logic.py```
+```(python3 or python) bots.py```

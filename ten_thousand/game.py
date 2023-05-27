@@ -1,5 +1,5 @@
 
-from game_logic import GameLogic
+from ten_thousand.game_logic import GameLogic
 
 class Game:
     def __init__(self):
